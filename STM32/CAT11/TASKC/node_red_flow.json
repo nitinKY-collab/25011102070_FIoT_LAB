@@ -1,0 +1,63 @@
+[
+  {
+    "id": "tab_cat10c",
+    "type": "tab",
+    "label": "CAT10C - STM32 HTTP Server Client",
+    "disabled": false,
+    "info": "Polls STM32 ESP8266 HTTP server on Port 80"
+  },
+  {
+    "id": "inject_poll",
+    "type": "inject",
+    "z": "tab_cat10c",
+    "name": "Poll Every 5s",
+    "props": [{"p": "payload"}],
+    "repeat": "5",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 160,
+    "wires": [["http_get"]]
+  },
+  {
+    "id": "http_get",
+    "type": "http request",
+    "z": "tab_cat10c",
+    "name": "GET http://192.168.1.105/",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.105/",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 380,
+    "y": 160,
+    "wires": [["debug_out"]]
+  },
+  {
+    "id": "debug_out",
+    "type": "debug",
+    "z": "tab_cat10c",
+    "name": "HTTP Response",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 600,
+    "y": 160,
+    "wires": []
+  }
+]

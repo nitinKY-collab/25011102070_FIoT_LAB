@@ -1,0 +1,61 @@
+[
+  {
+    "id": "tab_cat12",
+    "type": "tab",
+    "label": "CAT12 - BME280 HTTP Analytics",
+    "disabled": false,
+    "info": "Fetches JSON sensor data and calculates Min/Max/Average statistics"
+  },
+  {
+    "id": "inject_cat12",
+    "type": "inject",
+    "z": "tab_cat12",
+    "name": "Poll 2s",
+    "repeat": "2",
+    "once": true,
+    "wires": [["http_cat12"]]
+  },
+  {
+    "id": "http_cat12",
+    "type": "http request",
+    "z": "tab_cat12",
+    "name": "GET /bme280",
+    "method": "GET",
+    "ret": "obj",
+    "url": "http://192.168.1.105/",
+    "wires": [["func_analytics", "debug_cat12"]]
+  },
+  {
+    "id": "func_analytics",
+    "type": "function",
+    "z": "tab_cat12",
+    "name": "Calculate Statistics",
+    "func": "let t = msg.payload.temperature;
+let h = msg.payload.humidity;
+let p = msg.payload.pressure;
+let stats = context.get('stats') || { count: 0, sumT: 0, minT: 999, maxT: -999 };
+stats.count++;
+stats.sumT += t;
+if (t < stats.minT) stats.minT = t;
+if (t > stats.maxT) stats.maxT = t;
+stats.avgT = stats.sumT / stats.count;
+context.set('stats', stats);
+msg.stats = { temp: { min: stats.minT, max: stats.maxT, avg: stats.avgT } };
+return msg;",
+    "wires": [["debug_stats"]]
+  },
+  {
+    "id": "debug_cat12",
+    "type": "debug",
+    "z": "tab_cat12",
+    "name": "JSON Telemetry",
+    "wires": []
+  },
+  {
+    "id": "debug_stats",
+    "type": "debug",
+    "z": "tab_cat12",
+    "name": "Analytics Summary",
+    "wires": []
+  }
+]

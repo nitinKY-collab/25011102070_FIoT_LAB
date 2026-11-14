@@ -1,0 +1,39 @@
+[
+  {
+    "id": "tab_cat13",
+    "type": "tab",
+    "label": "CAT13 - BME280 MQTT Analytics",
+    "disabled": false,
+    "info": "Subscribes to broker.emqx.io on stm32/ky/data and parses live telemetry"
+  },
+  {
+    "id": "mqtt_broker_emqx",
+    "type": "mqtt-broker",
+    "name": "EMQX Public Broker",
+    "broker": "broker.emqx.io",
+    "port": "1883",
+    "clientid": "NodeRED_Subscriber_25011102070",
+    "autoConnect": true,
+    "usetls": false,
+    "keepalive": "60",
+    "cleansession": true
+  },
+  {
+    "id": "mqtt_in_node",
+    "type": "mqtt in",
+    "z": "tab_cat13",
+    "name": "Subscribe stm32/ky/data",
+    "topic": "stm32/ky/data",
+    "qos": "0",
+    "datatype": "json",
+    "broker": "mqtt_broker_emqx",
+    "wires": [["debug_mqtt_data"]]
+  },
+  {
+    "id": "debug_mqtt_data",
+    "type": "debug",
+    "z": "tab_cat13",
+    "name": "MQTT Live Telemetry",
+    "wires": []
+  }
+]
